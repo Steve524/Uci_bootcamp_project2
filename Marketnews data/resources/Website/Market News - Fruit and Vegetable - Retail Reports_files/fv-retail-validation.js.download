@@ -1,0 +1,523 @@
+var NS4 = (navigator.appName == "Netscape" && parseInt(navigator.appVersion) < 5);
+var addallback = 0;
+
+function checkIsAllOrganic(comdbox){
+ if (comdbox.options.length <= 1) return false;
+ for(i = 0; i < comdbox.options.length; i++) {
+	if (comdbox.options[i].selected && comdbox.options[i].text == "ALL") { 
+		comdbox.options[i].selected=false;
+		if (comdbox.selectedIndex != -1) {
+			comdbox.options[i].selected=true;
+			if (comdbox.name == "organic" ) {
+				alert("You have selected ALL and also other Organic. \n Please either select only ALL or the other Organic");
+			} else if (comdbox.name == "class" ){
+				alert("You have selected ALL and also other Class(s). \n Please either remove ALL or the other Class(s)");
+			}else if (comdbox.name == "region" ){
+				alert("You have selected ALL and also other Region(s). \n Please either remove ALL or the other Region(s)");
+			}else {
+				alert("You have selected ALL and also other Commodity(s). \n Please either remove ALL or the other Commodity(s)");
+			}
+			comdbox.focus();
+			return true;
+		}
+		comdbox.options[i].selected=true;
+	}
+ }
+ return false;
+}
+
+function moveOptions(theSelFrom, theSelTo)
+{	
+	var selLength = theSelFrom.length;
+	var selectedText = new Array();
+	var selectedValues = new Array();
+	var selectedCount = 0;
+	
+	var selLengthto = theSelTo.length;
+	var selectedTextto = new Array();
+	var selectedValuesto = new Array();
+	var selectedCountto = 0;	
+	var i,j;
+	var found = "false";
+
+	// Find the selected Options in reverse order
+	// and delete them from the 'from' Select.
+	for(i=selLength-1; i>=0; i--)
+	{
+		if(theSelFrom.options[i].selected)
+		{
+			selectedText[selectedCount] = theSelFrom.options[i].text;
+			selectedValues[selectedCount] = theSelFrom.options[i].value;
+		// conditional delete;
+			if (theSelFrom.options[i].text =="ALL" && selLengthto > 0 && (theSelFrom.name=="producttypefrom" )) {
+			} else {
+			deleteOption(theSelFrom, i);
+			}
+		//	if (theSelFrom.length > 0) {
+		//	deselectOption(theSelTo, theSelFrom.options[i].value);
+		//	}
+			selectedCount++;
+		}
+	}
+	
+	// Add the selected text/values in reverse order.
+	// This will add the Options to the 'to' Select
+	// in the same order as they were in the 'from' Select.
+		 
+	for(i=selectedCount-1; i>=0; i--)
+	{
+	//	addOption(theSelTo, selectedText[i], selectedValues[i]);
+		found = "false";
+		selLengthto = theSelTo.length;
+		for(j=selLengthto-1; j>=0; j--)
+		{
+		//	julie add only when not existing 
+			if (selectedValues[i] == theSelTo.options[j].value)
+			{ found = "true"; }					
+		}
+		if (found != "true") { 
+		addOption(theSelTo, selectedText[i], selectedValues[i]);}
+	} //end of for
+	
+	if(addallback==1){
+		if (theSelTo.name=="producttype"){
+			// add ALL back
+			var selText = new Array();
+			var selValues = new Array();
+			var selIsSel = new Array();
+			var newCount = -1;
+			var newSelected = -1;
+			var i; var j = -1;
+			//alert("addallback=1");
+			for(i=0;i<theSelFrom.length;i++){
+				newCount++;
+				if (i ==0 && theSelFrom.options[0].text!="ALL"){
+				selText[newCount] = "ALL";
+				selValues[newCount] = "";
+				selIsSel[newCount] = false;
+				newCount++;
+				}
+				selText[newCount] = theSelFrom.options[i].text;
+				selValues[newCount] = theSelFrom.options[i].value;
+				selIsSel[newCount] = theSelFrom.options[i].selected;							
+			}					
+			for(i=0;i<=newCount;i++){
+				var newOpt = new Option(selText[i],selValues[i])
+				theSelFrom.options[i] = newOpt;
+				theSelFrom.options[i].selected = selIsSel[i];					
+			                        }			
+		                                                        }		
+	                 }
+	
+	if ((theSelTo.name == "producttype") ) {
+		for (var i=0; i<theSelTo.options.length; i++) {
+		    	theSelTo.options[i].selected = true;
+  		}
+  		theSelTo.focus();
+  	} else {
+  		for (var i=0; i<theSelFrom.options.length; i++) {
+			theSelFrom.options[i].selected = true;
+  		}
+  		theSelFrom.focus();
+  	}
+	if(NS4) history.go(0);
+}
+
+function addOption(theSel, theText, theValue)
+{
+	if (theSel.length==0)   {
+		var newOpt = new Option(theText, theValue);
+		theSel.options[0] = newOpt;
+		theSel.selectedIndex = 0;
+	} else if (theSel.length==1 && (theSel.name=="producttypefrom"))   {
+		var newOpt = new Option(theText, theValue);
+		theSel.options[1] = newOpt;
+		theSel.selectedIndex = 0;
+	} else if (theText =="ALL" && theSel.length>0 && (theSel.name=="producttype")){
+		alert("All include all other parts. \n Please either select only ALL or the other parts");
+		return true;
+	} else { 
+
+		var selText = new Array();
+		var selValues = new Array();
+		var selIsSel = new Array();
+		var newCount = -1;
+		var newSelected = -1;
+		var i; var j = -1;
+		for(i=0;i<theSel.length;i++){
+			newCount++;
+			if(theSel.options[i].text == "ALL") {
+				addallback = 0;
+				if(theSel.name=="producttype"){
+				selText[newCount] = theText;
+				selValues[newCount] = theValue;
+				selIsSel[newCount] = false;
+				addallback = 1;
+				} else {
+						selText[newCount] = theSel.options[i].text;
+						selValues[newCount] = theSel.options[i].value;
+						selIsSel[newCount] = theSel.options[i].selected;
+				}
+		
+			} else {
+				if(theSel.name=="producttype" ||theSel.name=="producttypefrom"){
+				if(theText=="ALL" && j==-1){
+				selText[newCount] = theText;
+				selValues[newCount] = theValue;
+				selIsSel[newCount] = false;
+				newCount++;
+				j = newCount-1;
+				} else if (theSel.options[i].text > theText ){
+					if (j==-1){
+				selText[newCount] = theText;
+				selValues[newCount] = theValue;
+				selIsSel[newCount] = false;
+				newCount++;
+				j = newCount-1;
+					}
+				}
+				} else if (theText=="ALL" && j==-1){
+				selText[newCount] = theText;
+				selValues[newCount] = theValue;
+				selIsSel[newCount] = false;
+				newCount++;
+				j = newCount-1;
+				}
+				else {
+				if (theSel.options[i].text > theText){
+					if (j==-1){
+						selText[newCount] = theText;
+						selValues[newCount] = theValue;
+						selIsSel[newCount] = false;
+						newCount++;
+						j = newCount-1;
+					}
+				}
+				}
+			
+			selText[newCount] = theSel.options[i].text;
+			selValues[newCount] = theSel.options[i].value;
+			selIsSel[newCount] = theSel.options[i].selected;
+				if(i==theSel.length-1 && j==-1){
+					newCount++;
+					selText[newCount] = theText;
+					selValues[newCount] = theValue;
+					selIsSel[newCount] = false;
+				}
+			
+			}
+		}
+		for(i=0;i<=newCount;i++){
+			var newOpt = new Option(selText[i],selValues[i])
+			theSel.options[i] = newOpt;
+			theSel.options[i].selected = selIsSel[i];		
+		}
+	}
+}
+
+function deleteOption(theSel, theIndex)
+{	
+	var selLength = theSel.length;
+	if(selLength>0)
+	{
+		theSel.options[theIndex] = null;
+	}
+}
+
+function displayall(comdbox,locAbrfield,locAbrlength){
+//alert("in displayall, comdbox.name="+comdbox.name+"locAbrfield.name="+locAbrfield.name+"locAbrfield.value="+locAbrfield.value);
+var tmp="";
+	for(var i=0;i<comdbox.options.length;i++){
+	if (i==0 && i == comdbox.options.length-1){
+		tmp =comdbox.options[i].text+"||"+comdbox.options[i].value;
+	}else if (i < comdbox.length-1) {
+		tmp =tmp+comdbox.options[i].text+"||"+comdbox.options[i].value+"--";
+	} else {
+		tmp =tmp+comdbox.options[i].text+"||"+comdbox.options[i].value;
+	}
+	}
+	locAbrlength.value = comdbox.length;
+	locAbrfield.value = tmp;
+//alert("locAbrpass="+locAbrfield.value+"locAbrlength="+locAbrlength.value+"selectedlength="+locAbrselectedlength.value);
+
+}
+
+function enddateCheck(obj){ 
+	var fname; 
+	var fsname;
+	var sname; 
+	var sfname;
+	var yyfirst; 
+	var ddfirst; 
+	var mmfirst; 
+	var yysecond; 
+	var ddsecond;
+	var mmsecond;
+	var maxYears=2;
+	var errmsg = "";
+	var frequency = "weekly";
+	
+		dformat(document.wizard.repDate);
+		dformat(document.wizard.endDate);
+	 	fname = document.wizard.repDate.value; 
+ 		fsname = document.wizard.endDate.value;
+ 		sname = fname.split("/"); 
+ 		sfname = fsname.split("/");
+     	yyfirst = sname[2]; 
+    	ddfirst = sname[1]; 
+    	mmfirst = sname[0]-1; 
+    	yysecond = sfname[2]; 
+    	ddsecond = sfname[1];
+    	mmsecond = sfname[0]-1;
+    	errmsg = 'The date range must be within two years.';
+
+	//var rep =new Date(yyfirst,mmfirst,ddfirst,12,0,0); 
+    //var end =new Date(yysecond,mmsecond,ddsecond,12,0,0);
+    //var milliseconds1 = rep.getTime(); 
+    //var day1=rep.getDate(); 
+    //var day2=end.getDate(); 
+    //var milliseconds2 = end.getTime(); 
+    //var difference = milliseconds2 - milliseconds1;
+    //var oneday=1000*60*60*24; 
+    //var days = difference/oneday; 
+    yyfirst = parseInt(yyfirst, 10);
+    yysecond = parseInt(yysecond, 10);
+    mmfirst = parseInt(mmfirst, 10);
+    mmsecond = parseInt(mmsecond, 10);
+    ddfirst = parseInt(ddfirst, 10);
+    ddsecond = parseInt(ddsecond, 10);
+   // if(yyfirst < 2000){
+   // 	alert('Please choose a report date on or after year 2000.');
+   //		document.wizard.repDate.focus();
+   // 	return false;
+   // }
+    if ((yysecond < yyfirst) || (yysecond == yyfirst && mmsecond < mmfirst) || (yysecond == yyfirst && mmsecond == mmfirst && ddsecond < ddfirst)) {
+    	alert('The end date must be greater than or equal to the start date.');
+   		obj.focus(); 
+	    	obj.value="";
+	    	obj.select(); 
+    	return false;
+    } 
+    var rangeTooWide = false;
+    if(yysecond > yyfirst + maxYears)
+    	rangeTooWide = true;
+    if(!rangeTooWide && yysecond == yyfirst + maxYears && mmsecond > mmfirst)
+    	rangeTooWide = true;
+    if(!rangeTooWide && yysecond == yyfirst + maxYears && mmsecond == mmfirst && ddsecond >= ddfirst)
+    	rangeTooWide = true;
+   // if (days > maxdays) {  
+    if(rangeTooWide){
+    	alert(errmsg);    
+    	obj.focus(); 
+	    obj.value="";
+	    obj.select(); 
+     	return false; 
+    }
+    return true;
+}
+
+function check(){ 
+	var fname; 
+	var fsname;
+	var sname; 
+	var sfname;
+	var yyfirst; 
+	var ddfirst; 
+	var mmfirst; 
+	var yysecond; 
+	var ddsecond;
+	var mmsecond;
+	var maxdays;
+	var errmsg = "";
+	//var frequency = document.wizard.frequency.value;
+	//if(frequency.toLowerCase() == "daily" || frequency.toLowerCase() == "weekly" ){
+	 	fname = document.wizard.repDate.value; 
+ 		fsname = document.wizard.endDate.value;
+ 		sname = fname.split("/"); 
+ 		sfname = fsname.split("/");
+    	yyfirst = sname[2]; 
+    	ddfirst = sname[1]; 
+    	mmfirst = sname[0]-1; 
+    	yysecond = sfname[2]; 
+    	ddsecond = sfname[1];
+    	mmsecond = sfname[0]-1;
+    	//if(frequency.toLowerCase() == "daily"){
+    	//	maxdays = 365;
+    	//	errmsg = 'The date range must be within one year.';
+    	//}else{
+    		maxdays = 731;
+    		errmsg = 'The date range must be within two years.';
+    	//}
+	//}
+	var rep =new Date(yyfirst,mmfirst,ddfirst,12,0,0); 
+    var end =new Date(yysecond,mmsecond,ddsecond,12,0,0);
+    var milliseconds1 = rep.getTime(); 
+    var day1=rep.getDate(); 
+    var day2=end.getDate(); 
+    var milliseconds2 = end.getTime(); 
+    var difference = milliseconds2 - milliseconds1;
+    var oneday=1000*60*60*24; 
+    var days = difference/oneday; 
+    if (milliseconds1 > milliseconds2 ) {
+ 		alert('The end date must be greater than or equal to start date.');
+    	return false;
+    } 
+    if (days > maxdays) {  
+    	alert(errmsg);    
+    	return false; 
+    }
+}
+function dformat(obj)
+{
+    var token = new Array('', '', '');
+    var origdt = obj.value;
+    if (origdt.length == 0)
+    {
+	return true;
+    }
+    var ai = 0;
+    for (var i = 0; i < origdt.length; i++)
+    {
+	var ch = origdt.charAt(i);
+	if (ch >= 0 && ch <= 9)
+	{
+	    token[ai] += ch.toString();
+	}
+	else if (ch == '/' || ch == '-' || ch == '.')
+	{
+	    ai += 1;
+	}
+	else
+	{
+	    return dateError(obj);
+	}
+    }
+    if (ai > 2)
+    {
+	return dateError(obj);
+    }
+    for (var x = 0; x < 2; x++)
+    {
+       while (token[x].substr(0, 1) == '0') { token[x] = token[x].substr(1); }
+    }
+    if (token[2] >= 0 && token[2] < 100)
+    {
+	var x = new Number(token[2]);
+	if(x>50)
+		x = x + 1900;
+	else
+		x = x + 2000;
+	token[2] = x;
+    }
+    if (token[0] < 1 || token[0] > 12 ||
+	token[1] < 1 || token[1] > maxDay(token[0], token[2]) ||
+	token[2] < 1900)
+    {
+	return dateError(obj);
+    }
+    newdt = zeroPad(token[0].toString(),2) + '/' + 
+	    zeroPad(token[1].toString(),2) + '/' +
+            token[2].toString();
+    obj.value = newdt;
+    return true;
+}
+
+function zeroPad(str, len)
+{
+    var tmp = '00000000000000000000000000000000' + str;
+    tmp = tmp.substr(tmp.length - len, len);
+    return tmp;
+}
+
+function maxDay(mon, year)
+{
+    if (mon == 4 || mon == 6 || mon == 9 || mon == 11)
+    {
+	return 30;
+    }
+    if (mon != 2)
+    {
+	return 31;
+    }
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+    {
+	return 29;
+    }
+        return 28;
+}
+
+function dateError(obj)
+{
+alert('Please re-enter a valid date in MM/DD/YYYY format.');
+  //var msgloc1 = document.getElementById("errorMsg1");
+//msgloc1.innerHTML="<font color='red'> Please re-enter a valid date in MM/DD/YYYY format.</font>";
+   obj.focus();
+    obj.select();
+    return false;
+}
+
+function setDate()
+{
+    databaseForm[getNetuiTagName("effectiveOn")].value =  databaseForm.test.value;
+} 
+
+	function onlyNumsAllowed()
+	{
+	    var iKeyCode;
+		iKeyCode = event.keyCode;
+	    //
+	    //  If key pressed is not 0 - 9, don't allow it through.
+	    //
+	    if( iKeyCode < 48 || iKeyCode > 57 )
+	        event.keyCode = null;
+	}
+
+
+var r={
+  'special':/[\W]/g,
+  'quotes':/['\''&'\"']/g,
+  'notnumbers':/[^\d]/g
+}
+
+function valid(o,w){
+  o.value = o.value.replace(r[w],'');
+}
+
+function validateForm(theForm){
+	var dateObj;
+	if(theForm.repDate.value!="" && theForm.endDate.value==""){
+		alert("Please enter end date.");
+		theForm.endDate.focus();
+		return false;
+	}
+	
+	if(theForm.endDate.value!="" && theForm.repDate.value==""){
+		alert("Please enter report date.");
+		theForm.repDate.focus();
+		return false;
+	}
+	
+	var result = enddateCheck(theForm.endDate);
+	if (!result)
+		return false;
+	
+	return true;
+}
+ 
+  function checkNumber(obj)
+  {
+	var str = obj.value;
+  	if (str.length == 0){
+ 		 //	alert("value is empty");
+  	} else {
+	  	if (isNaN(obj.value) == true){
+    	  	alert("Please Enter a Numeric Value.");
+      		obj.focus();
+      		return false;
+  		}
+  	}
+    return true;
+  }
+  
+
+ 

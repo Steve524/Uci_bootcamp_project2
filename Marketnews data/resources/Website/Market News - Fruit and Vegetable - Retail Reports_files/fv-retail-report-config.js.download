@@ -1,0 +1,481 @@
+var xmlDoc = null;
+var xmlProcessed = false;
+//repType: fv, lgItem, lgSummary, pyItem, pySummary
+var portal = getParameter(window.top.location.search.substring(1), "portal");
+var allOptions = new Array();
+var rootNode = "root";
+var optionNames = getOptionNames(portal);
+var selectedOptions = new Array();
+var xmlDoc = null;
+var retailOptionName = getRetailOptionName(portal);
+
+for (var i = 0; i < optionNames.length; i++) {
+    selectedOptions[optionNames[i][0]] = getParameters(window.top.location.search.substring(1), optionNames[i][0]);
+}
+
+function backToWholeSale() {
+    if (portal == "ls") {
+        if (document.forms["wizard"].elements[retailOptionName].value != "retail") {
+            var newUrl = "/mnp/ls-report-config?";
+//	  		var newUrl = "/portal/lg?paf_dm=full&amp;paf_gear_id=" + document.forms["wizard"].elements["paf_gear_id"].value;
+            newUrl = newUrl + "&amp;reportConfig=true&amp;" + retailOptionName + "=" + document.forms["wizard"].elements[retailOptionName].value.replace(/ /g, "+");
+            window.location = newUrl;
+        }
+    } else if (portal == "fv") {
+        var newUrl = "/mnp/fv-report-config-step1?";
+        //var newUrl = "/portal/fv?paf_dm=full&paf_gear_id=" + document.forms["wizard"].elements["paf_gear_id"].value;
+        newUrl = newUrl + "&reportConfig=true&" + retailOptionName + "=" + document.forms["wizard"].elements[retailOptionName].value.replace(/ /g, "+");
+        newUrl = newUrl + "&repType=wiz&run=Run&dr=1";
+        window.location = newUrl;
+    } else if (portal == "py") {
+        if (document.forms["wizard"].elements[retailOptionName].value != "retail") {
+            var category = "";
+            if (document.forms["wizard"].elements["commodity"].value == "EGGS")
+                category = "Egg";
+            else
+                category = document.forms["wizard"].elements["commodity"].value;
+            category = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+
+            //var newUrl = "/portal/py?paf_dm=full&paf_gear_id=" + document.forms["wizard"].elements["paf_gear_id"].value;
+            var newUrl = "/mnp/py-report-config?";
+            newUrl = newUrl + "&amp;reportConfig=true&category=" + category + "&amp;" + retailOptionName + "=" + document.forms["wizard"].elements[retailOptionName].value.replace(/ /g, "+");
+            window.location = newUrl;
+        }
+    }
+}
+
+function displayReminder() {
+    if (!initialProcessing) {
+        document.getElementById("reminder").innerHTML = '<p><span class="BodyTextRedBold">Click Submit button to view the report with new criteria selections.</span></p>';
+    }
+}
+
+
+function getRetailOptionName(portal) {
+    if (portal == "ls")
+        return "category";
+    if (portal == "fv")
+        return "type";
+    if (portal == "py")
+        return "commodity";
+    return "category";
+}
+function getOptionNames(portal) {
+    var ons = new Array();
+    //each item is an array of 3 items: name of select, name of option, name of option text
+    // i.e., the item for following selection in XML
+    //<species><speciesName>B</speciesId><speciesName>Beef</speciesName></species>
+    //would be {"species", "speciesName", "speciesText"}
+    if (portal == "ls") {
+        //ons[0] = new Array();
+        //ons[0][0] = "species";
+        //ons[0][1] = "speciesId";
+        //ons[0][2] = "speciesName";
+        ons[0] = ["category", "categoryName", "categoryText"];
+        ons[1] = ["repType", "repTypeName", "repTypeText"];
+        ons[2] = ["species", "speciesId", "speciesName"];
+        ons[3] = ["region", "regionId", "regionName"];
+        ons[4] = ["cut", "cutId", "cutName"];
+        ons[5] = ["product", "productId", "productName"];
+        ons[6] = ["dataType", "dataTypeName", "dataTypeText"];
+        ons[7] = ["operator", "operatorName", "operatorText"];
+    } else if (portal == "fv") {
+        ons[0] = ["type", "typeName", "typeText"];
+        ons[1] = ["class", "className", "classText"];
+        ons[2] = ["region", "regionId", "regionName"];
+        ons[3] = ["commodity", "commName", "commText"];
+        ons[4] = ["organic", "organicName", "organicText"];
+
+    } else if (portal == "py") {
+        //new Array();
+        //ons[0][0] = "species";
+        //ons[0][1] = "speciesName";
+        //ons[0][2] = "speciesText";
+        ons[0] = ["class", "className", "classText"];
+        ons[1] = ["region", "regionName", "regionText"];
+        ons[2] = ["type", "typeName", "typeText"];
+        ons[3] = ["item", "itemName", "itemText"];
+        ons[4] = ["dataType", "dataTypeName", "dataTypeText"];
+    }
+
+    return ons;
+}
+
+var initialProcessing = true;
+var xmlRequest = getXMLHttpRequest();
+
+function getParameter(queryString, parameterName) {
+    // Add "=" to the parameter name (i.e. parameterName=value)
+    var parameterName = parameterName + "=";
+    if (queryString.length > 0) {
+        // Find the beginning of the string
+        begin = queryString.indexOf(parameterName);
+        // If the parameter name is not found, skip it, otherwise return the value
+        if (begin != -1) {
+            // Add the length (integer) to the beginning
+            begin += parameterName.length;
+            // Multiple parameters are separated by the "&" sign
+            end = queryString.indexOf("&", begin);
+            if (end == -1) {
+                end = queryString.length
+            }
+            // Return the string
+            return (unescape(queryString.substring(begin, end))).replace(/\+/g, " ");
+        }
+        // Return "null" if no parameter has been found
+        return "null";
+    }
+}
+
+function getParameters(queryString, parameterName) {
+    // Add "=" to the parameter name (i.e. parameterName=value)
+    var parameterName = parameterName + "=";
+    var result = new Array();
+    var workingString = queryString;
+    while (workingString.indexOf(parameterName) >= 0) {
+        // Find the beginning of the string
+        begin = workingString.indexOf(parameterName);
+        // If the parameter name is not found, skip it, otherwise return the value
+        if (begin != -1) {
+            // Add the length (integer) to the beginning
+            begin += parameterName.length;
+            // Multiple parameters are separated by the "&" sign
+            end = workingString.indexOf("&", begin);
+            if (end == -1) {
+                end = workingString.length
+            }
+            // Return the string
+            result.push((unescape(workingString.substring(begin, end))).replace(/\+/g, " "));
+            workingString = workingString.substring(end);
+        }
+        // Return "null" if no parameter has been found
+    }
+    return result;
+}
+
+function getXMLHttpRequest() {
+    var xmlHttp;
+    try {
+        // Firefox, Opera 8.0+, Safari
+        xmlHttp = new XMLHttpRequest();
+    }
+    catch (e) {
+        // Internet Explorer
+        try {
+            xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+        catch (e) {
+            try {
+                xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            catch (e) {
+                alert("Your browser does not support AJAX!");
+                return false;
+            }
+        }
+    }
+    return xmlHttp;
+}
+
+function getXMLDoc(portal) {
+    if (xmlDoc != null) return;
+    if (!xmlRequest) {
+        alert("error getting XML request.");
+        return;
+    }
+    if (xmlRequest.overrideMimeType)
+        xmlRequest.overrideMimeType('text/xml');
+    xmlRequest.onreadystatechange = processStatusChange;
+
+    //      TODO: Fix the XML file dynamic generation
+    var xmlUrl = null;
+    if (portal == "fv") {
+        //xmlUrl = "skin-rpt/xml/fv/retail/fv-retail-temp-config.xml"
+        xmlUrl = "fv-retail-report-config-xml"
+    } else if (portal == "ls") {
+        xmlUrl = "ls-retail-report-config-xml"
+    } else if (portal == "py") {
+        xmlUrl = "py-retail-report-config-xml"
+    } else {
+        //xmlUrl = "skin-rpt/xml/fv/retail/fv-retail-temp-config.xml"
+        xmlUrl = "fv-retail-report-config-xml"
+    }
+
+    xmlRequest.open("GET", xmlUrl, true);
+    xmlRequest.setRequestHeader("Content-Type", "text/xml");
+    xmlRequest.send(null);
+}
+
+function processStatusChange() {
+    if (xmlRequest.readyState == 4) {
+        if (xmlRequest.status == 200) {
+            xmlDoc = xmlRequest.responseXML; //retrieve result as an XML object
+            xmlProcessed = true;
+            processXmlDoc();
+        } else {
+            alert("An error has occurred making the request, " + xmlRequest.status)
+        }
+    }
+}
+
+function processXmlDoc() {
+    if (xmlProcessed == false) {
+        setTimeout('processXmlDoc()', 1000);
+        return;
+    }
+
+    processSelection(rootNode);
+    initialProcessing = false;
+}
+
+function processSelection(selName) {
+    if ((document.forms["wizard"].elements[retailOptionName].value != "retail" && document.forms["wizard"].elements[retailOptionName].value != "Organic") && !initialProcessing) {
+        backToWholeSale();
+        return;
+    }
+
+    if (!initialProcessing) {
+        for (var i = 0; i < optionNames.length; i++) {
+            selectedOptions[optionNames[i][0]] = new Array();
+            var sel_i = document.forms["wizard"].elements[optionNames[i][0]];
+            var sel_i_count = 0;
+            if (sel_i != null && sel_i.length > 0) {
+                for (var op = 0; op < sel_i.length; op++) {
+                    if (sel_i.options[op].selected == true) {
+                        selectedOptions[optionNames[i][0]][sel_i_count++] = sel_i.options[op].value;
+                    }
+                }
+            }
+        }
+    }
+    var level = -1;
+    for (var level0 = 0; level0 < optionNames.length; level0++) {
+        if (selName == optionNames[level0][0]) {
+            level = level0;
+            break;
+        }
+    }
+    if (level >= optionNames.length - 1) {
+        processSpecialEvent(selName);
+        return;
+    }
+    var nextOptions = new Array();
+    var nextOptionNodes = findOptionNodes(level + 1);
+    while (nextOptionNodes == null || nextOptionNodes.length == 0) {
+        var rowId = optionNames[level + 1][0] + "Row";
+        var r = document.getElementById(rowId);
+        if (r != null) r.style.display = "none";
+        level++;
+        if (level >= optionNames.length - 1) return;
+        nextOptionNodes = findOptionNodes(level + 1);
+    }
+
+    var rowId = optionNames[level + 1][0] + "Row";
+    var r = document.getElementById(rowId);
+    if (r != null) r.style.display = "";
+
+    var nextSelName = optionNames[level + 1][0];
+    var nextOptName = optionNames[level + 1][1];
+    var nextOptText = optionNames[level + 1][2];
+    var myCommOptions = new Array();
+    for (var i = 0; i < nextOptionNodes.length; i++) {
+        var commName = nextOptionNodes[i].getElementsByTagName(nextOptName)[0].firstChild.nodeValue;
+        var commText = nextOptionNodes[i].getElementsByTagName(nextOptText)[0].firstChild.nodeValue;
+
+        if (allOptions[selName] == null) {
+            allOptions[selName] = new Array();
+        }
+        var theOptions = allOptions[selName];
+        if (theOptions[nextOptName] == null) {
+            var newOption = new Option(commText, commName);
+            theOptions[commName] = newOption;
+        }
+        myCommOptions[i] = theOptions[commName];
+    }
+    if (selName == "region") {
+        myCommOptions = uniqueArray(myCommOptions);
+        myCommOptions.sort(compareNames);
+    }
+
+    for (var i = 0; i < myCommOptions.length; i++) {
+        //alert("selectedSubcategory="+selectedSubCategory+"optionsi="+document.forms["wizard"].elements[subcategoryControlName].options[i].value.replace(/ /g,"\+"));
+        var selItems = selectedOptions[nextSelName];
+        //if(selItems!=null && initialProcessing){
+        if (selItems != null) {
+            for (var j = 0; j < selItems.length; j++) {
+                if (selItems[j] == myCommOptions[i].value) {
+                    myCommOptions[i].selected = true;
+                    //break;
+                }
+            }
+        }
+    }
+    replaceOptions(document.forms["wizard"].elements[optionNames[level + 1][0]].options, myCommOptions);
+    var theSel = document.forms["wizard"].elements[optionNames[level + 1][0]];
+    if (theSel.multiple) {
+        if (theSel.length >= 10) {
+            theSel.size = 5;
+        } else {
+            theSel.size = theSel.length;
+        }
+    }
+
+    if (level + 1 < optionNames.length)
+        processSelection(optionNames[level + 1][0]);
+    processSpecialEvent(selName);
+}
+function compareNames(a, b) {
+    var nameA = a.value.toLowerCase();
+    var nameB = b.value.toLowerCase();
+    if (nameA < nameB) {
+        return -1
+    }
+    if (nameA > nameB) {
+        return 1
+    }
+    return 0;
+}
+function processSpecialEvent(selName) {
+    if (selName == "repType") {
+        var rt = document.forms["wizard"].elements[selName].value;
+        if (rt == "item") {
+            document.getElementById("compareRow").style.display = "";
+        } else {
+            document.getElementById("compareRow").style.display = "none";
+        }
+    }
+    if (!initialProcessing) {
+        displayReminder();
+    }
+
+}
+
+function findOptionNodes(level) {
+    var root = xmlDoc.getElementsByTagName(rootNode)[0];
+
+    if (level == 0) {
+        return root.getElementsByTagName(optionNames[level][0]);
+    }
+
+    for (var i = level - 1; i >= 0; i--) {
+        var pNodes = findOptionNodes(i);
+        if (pNodes == null) continue;
+        var parent = null;
+        var result = new Array();
+        var idx = 0;
+        for (var j = 0; j < pNodes.length; j++) {
+            //if(pNodes[j].firstChild.nodeValue==document.getElementsByName(optionNames[i][0]).value){
+            var isSelected = false;
+            var opts = document.forms["wizard"].elements[optionNames[i][0]].options;
+            for (var op = 0; op < opts.length; op++) {
+                if (opts[op].selected && pNodes[j].getElementsByTagName(optionNames[i][1])[0].firstChild.nodeValue == opts[op].value) {
+                    isSelected = true;
+                    break;
+                }
+            }
+            if (isSelected) {
+                //alert("Found parent: " + document.forms["wizard"].elements[optionNames[i][0]].value);
+                parent = pNodes[j];
+                var children = parent.childNodes;
+                for (var c = 0; c < children.length; c++) {
+                    if (children[c].nodeName == optionNames[level][0]) {
+                        result[idx++] = children[c];
+                    }
+                }
+                //parent.getElementsByTagName(optionNames[level][0]);
+            }
+        }
+        if (result.length > 0)
+            return result;
+    }
+    return null;
+}
+
+function processOnload() {
+    getXMLDoc();
+}
+
+function getCategoryNode() {
+    var root = xmlDoc.getElementsByTagName("categories")[0];
+    var categoryNodes = root.getElementsByTagName("category");
+    var categoryVal = document.forms["wizard"].elements[categoryControlName].value;
+    for (var i = 0; i < categoryNodes.length; i++) {
+        var ithCategory = categoryNodes[i].getElementsByTagName("catname")[0].firstChild.data;
+        if (ithCategory == categoryVal) {
+            return categoryNodes[i];
+        }
+    }
+    return null;
+}
+
+function replaceOptions(oldOptions, newOptions) {
+    for (var i = oldOptions.length - 1; i >= 0; i--) {
+        oldOptions[i] = null;
+    }
+    for (var i = 0; i < newOptions.length; i++) {
+        oldOptions[i] = newOptions[i];
+    }
+
+}
+
+function contains(pArray, pValue) {
+    if (pArray == null)
+        return false;
+    for (var i = 0; i < pArray.length; i++) {
+        if (pArray[i] == pValue)
+            return true;
+    }
+    return false;
+}
+
+function getRefineLbl() {
+    return "To narrow your report, please select the following:";
+}
+function getRefineHtmlText() {
+    var refineHtmlText = '<select name="type" size="5" multiple>';
+    refineHtmlText += '<option value="Blue" SELECTED>Blue</option>';
+    refineHtmlText += '</select>';
+    return refineHtmlText;
+}
+
+function sortOptions(optA, optB) {
+    if (optA.text.toLowerCase() == "all" && optB.text.toLowerCase() != "all")
+        return -1;
+    if (optA.text.toLowerCase() != "all" && optB.text.toLowerCase() == "all")
+        return 1;
+    if (optA.text.toLowerCase() > optB.text.toLowerCase())
+        return 1;
+    else if (optA.text.toLowerCase() == optB.text.toLowerCase())
+        return 0;
+    else if (optA.text.toLowerCase() < optB.text.toLowerCase())
+        return -1;
+    return 0;
+}
+
+function checkStatus(obj) {
+
+    var str = obj.value;
+    var parametervalue = document.wizard.parametervalue;
+    var operator = document.wizard.operator;
+    if (str == "None Selected") {
+        document.wizard.parametervalue.disabled = true;
+        document.wizard.operator.disabled = true;
+    } else {
+        document.wizard.parametervalue.disabled = false;
+        document.wizard.operator.disabled = false;
+    }
+
+}
+
+function uniqueArray(a) {
+    var r = new Array();
+    o:for (var i = 0, n = a.length; i < n; i++) {
+        for (var x = 0, y = r.length; x < y; x++) {
+            if (r[x].value == a[i].value) continue o;
+        }
+        r[r.length] = a[i];
+    }
+    return r;
+
+}
+ 

@@ -1,0 +1,392 @@
+body {
+    margin:0;
+    padding:0;
+    FONT-FAMILY: Verdana;
+    color: #464646;
+    FONT-SIZE: 11px;
+    list-style-type:disc;
+}
+
+/* Text of class accessibility will not be displayed but will be read by screen reader */
+.accessibility
+{
+    display: none;
+}
+
+/* Form call */
+form {
+    display: inline;
+    margin-bottom: 0px;
+    padding: 0;
+}
+label {
+    font-weight: bold;
+}
+select, option, input {
+    /*padding-right: 10px;*/
+    color: #464646;
+}
+input {
+    margin-right: 5px;
+    font-size: 9pt;
+}
+option, select {
+    /*text-transform: lowercase;*/
+    font-size: 9pt;
+}
+input:hover, option:hover {
+    cursor: pointer;
+}
+option:hover {
+    background-color: #DBEAF5;;
+}
+
+P {
+    FONT-SIZE: 11px;
+    margin-top:3px;
+    margin-bottom:7px;
+}
+UL {
+    FONT-SIZE: 11px;
+    margin-top:5px;
+    margin-bottom:0em;
+}
+LI {
+    FONT-SIZE: 11px;
+    list-style-type:disc;
+}
+
+/* Visited Link Style */
+A:visited
+{
+    FONT-WEIGHT: normal;
+    COLOR: #660099;
+    TEXT-DECORATION: none;
+}
+
+/* Link Style */
+A:link
+{
+    FONT-WEIGHT: normal;
+    COLOR: #000099;
+    TEXT-DECORATION: none;
+}
+
+/* Hover Link Style */
+A:hover
+{
+    FONT-WEIGHT: normal;
+    COLOR: #000099;
+    TEXT-DECORATION: underline;
+}
+
+/* Header Styles */
+h1, h2, h3, h4, h5, h6 {
+    padding: 10px 0 10px 20px;
+    margin: 0;
+    color: #464646;
+}
+
+
+.BodyTextBlueBold {
+    /*FONT-FAMILY: Verdana;*/
+    font-size : 9px;
+    font-weight : bold;
+    color : #000099;
+}
+.alertMessage {
+    font-size : 9px;
+    color: #000;
+}
+
+.ErrorMessageNormal {
+    /*FONT-FAMILY: Verdana;*/
+    font-size : 11px;
+    font-weight : normal;
+    color : #FF0000;
+}
+.ErrorMessageBold {
+    /*FONT-FAMILY: Verdana;*/
+    font-size : 11px;
+    font-weight : bold;
+    color : #FF0000;
+}
+.BodyTextRedBold {
+    /*FONT-FAMILY: Verdana;*/
+    font-size : 11px;
+    font-weight : bold;
+    color : #ff0000;
+}
+
+
+/*************** THIS IS THE NEW CSS STYLES FOR REPORT ************************/
+
+/********** STYLES USED ON REPORT DATA GRID (TABLE) ***********/
+.reportTable {
+    width: 100%;
+    border: solid thin #E4EDF2;
+    margin-bottom: 7px;
+}
+.custom-report-100width .reportTable {
+    width: 100%;
+}
+
+.ReportsSubheader th {
+    font-size : 11px;
+    font-weight : bold;
+    color : #000000;
+    padding: 3px 3px 3px 7px;
+    /*margin-top: 55px !important;*/
+    background-color: #A1A4B3;
+}
+.ReportsTableHeader th {
+    font-size : 7pt;
+    font-weight: normal;
+    border-bottom: solid #8090AB thin;
+    background-color: #D6D6D6;
+    /*background-color: #CFD3E6;*/
+    white-space: nowrap;
+    padding: 3px 5px 3px 5px;
+    color : #000;
+}
+/*.ReportsTableHeader th a {*/
+    /*font-size : 7pt;*/
+    /*font-weight: normal;*/
+    /*border-bottom: solid #8090AB thin;*/
+    /*background-color: #D6D6D6;*/
+    /*background-color: #CFD3E6;*/
+    /*padding: 3px 5px 3px 5px;*/
+    /*color : #000;*/
+/*}*/
+.ReportsTableCell2 {
+    font-size : 7pt;
+    font-weight : normal;
+    color : #464646;
+}
+.ReportsTableCell2 td {
+    padding: 3px 5px 3px 5px;
+    text-align: center;
+}
+.ReportsTableCell2:last-child {
+
+}
+/*** Alternate results table row color ****/
+.ReportsTableCell2:nth-child(odd)    { background-color:#eee; }
+.ReportsTableCell2:nth-child(even)	{ background-color:#fff; }
+
+.ReportsTableCell2:hover {
+    background-color: #DBEAF5;
+}
+.report-border {
+    /*border-top: medium groove #BAE5C3;*/
+}
+
+
+.reportMainPane {
+    padding: 0 10px 10px 10px;
+}
+.customReportHeader {
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwNmUyZSIgc3RvcC1vcGFjaXR5PSIwLjc1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDZlMmUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(0,110,46,0.75) 0%, rgba(0,110,46,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,110,46,0.75)), color-stop(100%,rgba(0,110,46,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(0,110,46,0.75) 0%,rgba(0,110,46,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(0,110,46,0.75) 0%,rgba(0,110,46,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(0,110,46,0.75) 0%,rgba(0,110,46,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(0,110,46,0.75) 0%,rgba(0,110,46,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf006e2e', endColorstr='#006e2e',GradientType=0 ); /* IE6-8 */
+}
+.customReportHeader span {
+    font-size: 22px;
+    font-weight: bold;
+    padding-left: 25px;
+    color: #fff;
+    line-height: 30px;
+}
+.rptHeaderInfo {
+    width: 100%;
+    max-width: 650px;
+    min-width: 450px;
+}
+.rptContent {
+    margin:  0 10px 10px 10px;
+}
+.runButtonRow {
+    padding: 3px 0 3px 0;
+
+    /*background-color: #707F94;*/
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzcwN2Y5NCIgc3RvcC1vcGFjaXR5PSIwLjc1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3MDdmOTQiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(112,127,148,0.75) 0%, rgba(112,127,148,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(112,127,148,0.75)), color-stop(100%,rgba(112,127,148,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(112,127,148,0.75) 0%,rgba(112,127,148,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(112,127,148,0.75) 0%,rgba(112,127,148,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(112,127,148,0.75) 0%,rgba(112,127,148,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(112,127,148,0.75) 0%,rgba(112,127,148,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf707f94', endColorstr='#707f94',GradientType=0 ); /* IE6-8 */
+}
+.runButtonRow2 {
+    padding: 3px 0 3px 0;
+
+    background:rgb(112,127,148);
+    background: transparent\9;
+    background:rgba(112,127,148,0.2);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#c006e2e,endColorstr=#c006e2e);
+    zoom: 1;
+}
+.runButtonRow2:nth-child(n) {
+    filter: none;
+}
+
+.highlightBG1 {
+    background: rgb(245,249,247);
+    /*background:rgb(0,110,46);*/
+    /*background: transparent\9;*/
+    /*background:rgba(0,110,46,0.04);*/
+    /*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#c006e2e,endColorstr=#c006e2e);*/
+    /*zoom: 1;*/
+}
+.highlightBG1:nth-child(n) {
+    filter: none;
+}
+.headerReportInfo td:first-child {
+    font-size : 11px;
+    font-weight : bold;
+    color:#464646;
+    text-align: left;
+    vertical-align: middle;
+    width: 5%;
+    padding-right: 20px;
+}
+
+/*** Overriding previous table styles ***/
+.reportPromptLayoutTable {
+    /*width: 60%;*/
+    /*border: thin solid #0F5085;*/
+}
+.reportPromptLayoutTable tr td:nth-child(3) {
+    padding-left: 20px;
+}
+.reportPromptLayoutTable tr:nth-child(2) td:first-child {
+    /*width: 15%;*/
+}
+
+.reportPromptLayoutTableRetail {
+    width: 100%;
+    /*border: thin solid #0F5085;*/
+}
+.reportPromptLayoutTableRetail tr td:first-child {
+    font-size : 11px;
+    font-weight : bold;
+    color:#464646;
+    text-align: left;
+    vertical-align: middle;
+    padding-right: 5px;
+}
+.reportPromptLayoutTableRetail tr:nth-child(2) td:first-child {
+    width: 15%;
+}
+
+
+
+.notificationText {
+    font-size: 85% !important;
+    font-weight: normal !important;
+}
+.leftAlignOverride {
+    text-align: left !important;
+}
+.centerAlignOverride {
+    text-align: center !important;
+}
+
+/*** The two below classes are for report layout header ***/
+.das1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    padding-top: 10px;
+}
+.das2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.promptBody {
+    background-color: #fff;
+    /*background-color: #FFFFCC;*/
+}
+
+
+.BodyTextBlack {
+    /*FONT-FAMILY: Verdana;*/
+    font-size : 11px;
+    font-weight : normal;
+    color: #333;
+}
+
+.BodyTextBlackBold{
+    font-size : 11px;
+    font-weight : bold;
+    color:#464646;
+    text-align: right;
+    vertical-align: middle;
+}
+.dataNotice {
+    font-size: 10px;
+    color: firebrick;
+    padding-left: 7px;
+}
+.reportResults .ReportsTableCell2 {
+    font-size: 85%;
+}
+.headerLogo {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+#mastUsdaLogo {
+    padding: 10px 10px 0px 10px;
+}
+#dateLbl {
+    font-weight: bold;
+    font-size : 10px;
+    text-align: left !important;
+}
+.sectionTitle {
+    font-size: 14px;
+    /*text-decoration:underline;*/
+}
+
+/********** MOVED OVER FROM FVMNSSTYLEDEFAULT.CSS ***********/
+/*.smaller {font-size:7pt; font-weight: normal }*/
+/*.small   {font-size:8pt; }*/
+/*.medium  {font-size:10pt; }*/
+/*.large   {font-size:12pt; }*/
+/*.larger  {font-size:16pt; }*/
+
+/*.smaller_bold {font-size:7pt; font-weight:700 }*/
+/*.small_bold   {font-size:8pt; font-weight:700 }*/
+/*.medium_bold  {font-size:10pt; font-weight:700 }*/
+/*.large_bold   {font-size:12pt; font-weight:700 }*/
+/*.larger_bold  {font-size:16pt; font-weight:700 }*/
+
+.hiddenLabel {
+    display: none;
+}
+
+
+/* ================  ==================*/
+#altReportView .ReportsSubheader {
+    text-align: left;
+
+}
+
+.waiting-text {
+    font-family: "Arial Black", Gadget, sans-serif;
+    color: #888;
+    font-size: 14px;
+}
