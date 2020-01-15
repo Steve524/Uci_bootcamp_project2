@@ -1,0 +1,83 @@
+#home {
+    background-color: peru;
+    color: black;
+    font-size: 30px;
+    font-weight: 700;
+    font-family: cursive;
+}
+
+#bs-example-navbar-collapse-1 {
+    background-color: peru;
+}
+
+#tab-color {
+    color: black;
+    background-color: peru;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: cursive;
+}
+
+#home-photo {
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#paragraph-image {
+    float: right;
+    padding-left: 15px;
+    padding-bottom: 10px;
+}
+
+.intro-paragraph {
+    font-size: 16px;
+    text-indent: 40px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#paragraph-padding {
+    padding-top: 10px;
+}
+
+#image {
+    width: 500px;
+    height: 350px;
+    margin-top: 75px;
+}
+
+#video {
+    font-size: 20px;
+    font-family: cursive;
+    padding-top: 15px;
+    margin-left: 75px;
+}
+
+iframe {
+    margin-left: 75px;
+    margin-top: 15px;
+}
+
+#image-2 {
+    width: 475px;
+    height: 300px;
+    box-shadow: 15px 15px 5px black;
+}
+
+#image-3 {
+    margin-top: 30px;
+    width: 500px;
+    height: 350px;
+    box-shadow: 15px 15px 10px black;
+}
+
+#joseph {
+    width: 505px;
+    height: 505px;
+}
+
+
+
+
+
