@@ -31,6 +31,12 @@
     padding-bottom: 10px;
 }
 
+.intro-paragraph {
+    font-size: 16px;
+    text-indent: 40px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 #paragraph-padding {
     padding-top: 10px;
 }
@@ -41,10 +47,37 @@
     margin-top: 75px;
 }
 
+#video {
+    font-size: 20px;
+    font-family: cursive;
+    padding-top: 15px;
+    margin-left: 75px;
+}
+
+iframe {
+    margin-left: 75px;
+    margin-top: 15px;
+}
+
+#image-2 {
+    width: 475px;
+    height: 300px;
+    box-shadow: 15px 15px 5px black;
+}
+
+#image-3 {
+    margin-top: 30px;
+    width: 500px;
+    height: 350px;
+    box-shadow: 15px 15px 10px black;
+}
+
 #joseph {
     width: 505px;
     height: 505px;
 }
+
+
 
 
 
