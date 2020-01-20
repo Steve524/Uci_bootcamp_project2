@@ -70,16 +70,7 @@ d3.csv("resources/final_data2.csv", function(data) {
     var myColor = d3.scaleOrdinal()
       .domain(allGroup)
       .range(d3.schemeSet2);
-
-    //Convert CSV date into D3 date  
-    // var parseDate = d3.time.format("%Y-%m-%d").parse
-    // parseDate(d.Date)
-    // function convert(d) {
-  		// return {
-    // date: new Date(d.Date),
-    // value: +d.value         // convert string to number
-  		// };
-	//} 
+	} 
 
     // Add X axis --> it is a date format
     var x = d3.scaleLinear()
@@ -127,31 +118,6 @@ d3.csv("resources/final_data2.csv", function(data) {
           )
           .attr("stroke", function(d){ return myColor(selectedGroup) })
     }
-
-//     var line = d3.svg.line().interpolate('linear');
-//     function draw_verticals(chart, points){
-//     // merge
-//     var selection = chart.g()
-//       .select('g.chart-body')
-//       .selectAll('path.horizontal')
-//       .data(points)
-//     // append
-//     selection.enter()
-//       .append('path')
-//       .attr('class', 'horizontal reddot')
-//       .attr('d', function(d) {
-//         var x = chart.x()(d);
-//         //Seasonal line for Fall, Winter, Summer, and Sping
-//         return line([
-//           [x, chart.y().range()[0]],
-//           [x, chart.y().range()[1]],
-//           [x, chart.y().range()[2]],
-//           [x, chart.y().range()[3]]
-//         ]);
-//       });
-//     // remove
-//     selection.exit().remove();
-// }
 
     // When the button is changed, run the updateChart function
     d3.select("#selectButton").on("change", function(d) {
