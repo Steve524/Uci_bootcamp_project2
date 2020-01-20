@@ -41,19 +41,6 @@ d3.csv("resources/final_data2.csv", function(data) {
   var parseDate = d3.timeParse("%m/%d/%Y");
   parseDate(Date(data.Date)); // "June 30, 2015"
 
-
-
-// .row(function(d) { return { week: parseDate(d.week), price: Number(d.price.trim().slice(1))}; })
-//     .get(function(error, rows) {
-//       max = d3.max(rows, function(d) { return d.price; });
-//       minDate = d3.min(rows, function(d) {return d.week; });
-//       maxDate = d3.max(rows, function(d) { return d.week; });
-//   if (error) throw error;
-
-// data.forEach(function(d) {
-//     Dates = parseDate(d.Date);
-//   });
-
     // List of groups (here I have one group per column)
     var allGroup = d3.map(data, function(d){return(d.Commodity)}).keys()
     
